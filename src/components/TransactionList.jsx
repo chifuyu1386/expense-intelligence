@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { TransactionContext } from "../context/TransactionContext";
 import TransactionItem from "./TransactionItem";
 
-function TransactionList() {
+function TransactionList({ setEditingTransaction }) {
   const { transactions } = useContext(TransactionContext);
 
   return (
@@ -22,6 +22,7 @@ function TransactionList() {
           <TransactionItem
             key={transaction.id}
             transaction={transaction}
+            setEditingTransaction={setEditingTransaction}
           />
         ))}
       </div>

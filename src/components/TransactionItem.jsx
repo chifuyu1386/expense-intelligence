@@ -1,7 +1,10 @@
 import { useContext } from "react";
 import { TransactionContext } from "../context/TransactionContext";
 
-function TransactionItem({ transaction }) {
+function TransactionItem({
+  transaction,
+  setEditingTransaction,
+}) {
   const { dispatch } = useContext(TransactionContext);
 
   const isIncome = transaction.type === "income";
@@ -11,6 +14,10 @@ function TransactionItem({ transaction }) {
       type: "DELETE_TRANSACTION",
       payload: transaction.id,
     });
+  }
+
+  function handleEdit() {
+    setEditingTransaction(transaction);
   }
 
   return (
@@ -33,6 +40,13 @@ function TransactionItem({ transaction }) {
         >
           {isIncome ? "+" : "-"}${transaction.amount.toFixed(2)}
         </p>
+
+        <button
+          onClick={handleEdit}
+          className="rounded-md px-2 py-1 text-sm text-slate-500 transition hover:bg-slate-800 hover:text-white"
+        >
+          Edit
+        </button>
 
         <button
           onClick={handleDelete}

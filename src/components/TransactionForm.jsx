@@ -1,30 +1,62 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { TransactionContext } from "../context/TransactionContext";
 
-function TransactionForm() {
+function TransactionForm({
+  editingTransaction,
+  setEditingTransaction,
+}) {
   const { dispatch } = useContext(TransactionContext);
 
   const [title, setTitle] = useState("");
+
   const [amount, setAmount] = useState("");
+
   const [type, setType] = useState("expense");
+
   const [category, setCategory] = useState("Food");
+
+  useEffect(() => {
+  if (editingTransaction) {
+    setTitle(editingTransaction.title);
+    setAmount(editingTransaction.amount);
+    setType(editingTransaction.type);
+    setCategory(editingTransaction.category);
+  }
+  }, [editingTransaction]);
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    const newTransaction = {
-      id: Date.now(),
-      title,
-      amount: Number(amount),
-      type,
-      category,
-      date: new Date().toISOString().split("T")[0],
-    };
+    if (editingTransaction) {
+      const updatedTransaction = {
+        ...editingTransaction,
+        title,
+        amount: Number(amount),
+        type,
+        category,
+      };
 
-    dispatch({
-      type: "ADD_TRANSACTION",
-      payload: newTransaction,
-    });
+      dispatch({
+        type: "UPDATE_TRANSACTION",
+        payload: updatedTransaction,
+      });
+
+      setEditingTransaction(null);
+    } else {
+      const newTransaction = {
+        id: Date.now(),
+        title,
+        amount: Number(amount),
+        type,
+        category,
+        date: new Date().toISOString().split("T")[0],
+      };
+
+      dispatch({
+        type: "ADD_TRANSACTION",
+        payload: newTransaction,
+      });
+    }
 
     setTitle("");
     setAmount("");
@@ -32,10 +64,21 @@ function TransactionForm() {
     setCategory("Food");
   }
 
+  function handleCancel() {
+    setEditingTransaction(null);
+
+    setTitle("");
+    setAmount("");
+    setType("expense");
+    setCategory("Food");
+  }
+
+  const isEditing = Boolean(editingTransaction);
+
   return (
     <section className="rounded-xl border border-slate-800 bg-slate-900 p-6">
       <h2 className="text-lg font-semibold text-white">
-        Add Transaction
+        {isEditing ? "Edit Transaction" : "Add Transaction"}
       </h2>
 
       <form
@@ -82,12 +125,24 @@ function TransactionForm() {
           </select>
         </div>
 
-        <button
-          type="submit"
-          className="w-full rounded-lg bg-white px-4 py-3 font-semibold text-slate-950 transition hover:bg-slate-200"
-        >
-          Add Transaction
-        </button>
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            className="flex-1 rounded-lg bg-white px-4 py-3 font-semibold text-slate-950 transition hover:bg-slate-200"
+          >
+            {isEditing ? "Update Transaction" : "Add Transaction"}
+          </button>
+
+          {isEditing && (
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="rounded-lg border border-slate-700 px-4 py-3 font-semibold text-slate-300 transition hover:bg-slate-800"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
     </section>
   );
