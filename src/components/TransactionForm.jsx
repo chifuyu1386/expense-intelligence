@@ -15,6 +15,8 @@ function TransactionForm({
 
   const [category, setCategory] = useState("Food");
 
+  const [error, setError] = useState("");
+
   useEffect(() => {
   if (editingTransaction) {
     setTitle(editingTransaction.title);
@@ -27,11 +29,24 @@ function TransactionForm({
   function handleSubmit(event) {
     event.preventDefault();
 
+    const trimmedTitle = title.trim();
+    const numericAmount = Number(amount);
+
+    if (!trimmedTitle) {
+      setError("Please enter a transaction title.");
+      return;
+    }
+
+    if (!amount || Number.isNaN(numericAmount) || numericAmount <= 0) {
+      setError("Please enter an amount greater than 0.")
+      return;
+    }
+
     if (editingTransaction) {
       const updatedTransaction = {
         ...editingTransaction,
-        title,
-        amount: Number(amount),
+        title: trimmedTitle,
+        amount: numericAmount,
         type,
         category,
       };
@@ -45,8 +60,8 @@ function TransactionForm({
     } else {
       const newTransaction = {
         id: Date.now(),
-        title,
-        amount: Number(amount),
+        title: trimmedTitle,
+        amount: numericAmount,
         type,
         category,
         date: new Date().toISOString().split("T")[0],
@@ -62,6 +77,7 @@ function TransactionForm({
     setAmount("");
     setType("expense");
     setCategory("Food");
+    setError("")
   }
 
   function handleCancel() {
@@ -81,6 +97,12 @@ function TransactionForm({
         {isEditing ? "Edit Transaction" : "Add Transaction"}
       </h2>
 
+      {error && (
+        <p className="mt-4 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          {error}
+        </p>
+      )}
+      
       <form
         onSubmit={handleSubmit}
         className="mt-6 space-y-4"
@@ -89,7 +111,10 @@ function TransactionForm({
           type="text"
           placeholder="Transaction title"
           value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          onChange={(event) => {
+            setTitle(event.target.value);
+            setError("");
+          }}
           className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-slate-500"
         />
 
@@ -97,7 +122,10 @@ function TransactionForm({
           type="number"
           placeholder="Amount"
           value={amount}
-          onChange={(event) => setAmount(event.target.value)}
+          onChange={(event) => {
+            setAmount(event.target.value);
+            setError("");
+          }}
           className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-slate-500"
         />
 
@@ -144,6 +172,7 @@ function TransactionForm({
           )}
         </div>
       </form>
+
     </section>
   );
 }

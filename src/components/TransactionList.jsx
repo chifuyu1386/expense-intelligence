@@ -6,7 +6,7 @@ function TransactionList({ setEditingTransaction }) {
   const { transactions } = useContext(TransactionContext);
 
   return (
-    <section className="rounded-xl border border-slate-800 bg-slate-900 p-6">
+    <section className="min-w-0 rounded-xl border border-slate-800 bg-slate-900 p-6">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-white">
           Recent Transactions
@@ -17,7 +17,7 @@ function TransactionList({ setEditingTransaction }) {
         </p>
       </div>
 
-      <div>
+      <div className="max-h-[600px] overflow-y-auto pr-2">
         {transactions.map((transaction) => (
           <TransactionItem
             key={transaction.id}

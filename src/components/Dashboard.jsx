@@ -14,7 +14,7 @@ function Dashboard() {
       <div className="mt-8 space-y-8">
         <SummaryCards />
 
-        <div className="grid gap-8 lg:grid-cols-[380px_1fr]">
+        <div className="grid items-start gap-8 lg:grid-cols-[380px_1fr]">
           <TransactionForm
             editingTransaction={editingTransaction}
             setEditingTransaction={setEditingTransaction}
