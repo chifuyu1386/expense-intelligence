@@ -6,7 +6,7 @@ Expense Intelligence allows users to track income and expenses, manage transacti
 
 ## Live Demo
 
-[View Expense Intelligence](https://YOUR-GITHUB-USERNAME.github.io/expense-intelligence/)
+[View Expense Intelligence](https://chifuyu1386.github.io/expense-intelligence/)
 
 ## Preview
 
@@ -80,3 +80,4 @@ src/
 ├── App.jsx
 ├── main.jsx
 └── index.css
+```
