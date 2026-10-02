@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import { TransactionContext } from "../context/TransactionContext";
 import TransactionItem from "./TransactionItem";
 
-function TransactionList({ setEditingTransaction }) {
-  const { transactions } = useContext(TransactionContext);
-
+function TransactionList({
+  transactions,
+  setEditingTransaction,
+}) {
   return (
     <section className="min-w-0 rounded-xl border border-slate-800 bg-slate-900 p-6">
       <div className="mb-4">
